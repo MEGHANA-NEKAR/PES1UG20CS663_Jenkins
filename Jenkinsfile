@@ -4,29 +4,34 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'mvn clean package'
-                sh 'g++ main/task5.cpp'
+                
+                sh 'g++ -o PES1UG20CS663 PES1UG20CS663.cpp'
+                build job: 'PES1UG20CS663-1'
+                echo 'Build Stage Successful'
             }
         }
 
         stage('Test') {
             steps {
-                sh 'mvn test'
-                sh './a.out
+                sh "chmod +x -R ${env.WORKSPACE}"
+                sh './PES1UG20CS663'
+                echo 'Test Stage Successful'
             }
         }
+
         stage('Deploy') {
             steps {
-                sh 'deploy.sh'
+                
+                sh "chmod +x -R ${env.WORKSPACE}"
+                echo 'Deployment Successful'
             }
         }
     }
+
     post {
-        always {
-            sh 'echo "Pipeline completed"'
-        }
-        failure {
-            sh 'echo "Pipeline failed"'
-        }
+      failure{
+        echo 'Pipeline failed'
+      }
+        
     }
 }
